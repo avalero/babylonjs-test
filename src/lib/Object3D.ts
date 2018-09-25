@@ -1,5 +1,6 @@
 import * as BABYLON from 'babylonjs'
 import uuid from 'uuid'
+import Cube from './Cube';
 
 export interface IParameterType{
   name:string,
@@ -46,7 +47,8 @@ export interface IObject3DJson{
   name:string, 
   parameters: (ICubeParams|ISphereParams), 
   operations: Array< (ITranslateOperation|IRotateOperation|IScaleOperation )>, 
-  id: string
+  id: string,
+  type: string
 }
 
 export class Object3D{
@@ -105,9 +107,14 @@ export class Object3D{
   
   constructor(name: string, parameters: (ICubeParams|ISphereParams), operations:Array<ITranslateOperation|IRotateOperation|IScaleOperation> = [], id?:string){
     const defaultParams: (ICubeParams|ISphereParams|any) = {};
-    (this.constructor as typeof Object3D).parameterTypes.forEach(paramType => {
-      defaultParams[paramType.name!] = paramType.defaultValue;
-    });
+
+
+    // IS THIS WORKING?
+    if (this instanceof Cube){
+      (this.constructor as typeof Cube).parameterTypes.forEach(paramType => {
+        defaultParams[paramType.name!] = paramType.defaultValue;
+      });
+    }
 
     // select random color
     const colorI: number = Math.floor(Math.random() * Object3D.colors.length);
@@ -192,7 +199,7 @@ export class Object3D{
         });
     }  }
 
-  public getMesh(scene: BABYLON.Scene) {
+  public getMesh(scene: BABYLON.Scene): BABYLON.Mesh {
     const mesh: BABYLON.Mesh = this.getGeometry(scene);
     
     const material = new BABYLON.StandardMaterial("material", scene);
@@ -209,14 +216,19 @@ export class Object3D{
     throw new Error('Method not implemented');
   }
 
-  public toJSON() {
+  public toJSON():IObject3DJson {
+    let type:string ="";
+    if (this instanceof Cube){
+      type = (this.constructor as typeof Cube).typeName;
+    }
+
     const {id, name, parameters, operations, constructor} = this;
     return {
       id,
       name,
-      type: constructor.typeName,
+      type,
       parameters,
-      operations
+      operations,
     };
   }
 }
