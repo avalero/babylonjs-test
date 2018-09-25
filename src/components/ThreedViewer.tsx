@@ -27,8 +27,8 @@ export default class ThreedViewer extends React.Component<{}, {}> {
 
         // Our built-in 'sphere' shape. Params: name, subdivs, size, scene
         
-        const cube = new Cube("cube1",{width:10, height:20, depth:10}).getMesh(scene);
-        console.log(cube);
+        new Cube("cube1",{width:10, height:20, depth:10}).getMesh(scene);
+        //console.log(cube);
         // Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene
         const ground = BABYLON.MeshBuilder.CreateGround("myGround", {width: 100, height: 100}, scene);
 
