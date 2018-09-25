@@ -53,6 +53,7 @@ export interface IObject3DJson{
 
 export class Object3D{
 
+  public static typeName:string ="";
   public static parameterTypes: IParameterType[] = [];
 
   public static colors: string[] = [
@@ -109,12 +110,9 @@ export class Object3D{
     const defaultParams: (ICubeParams|ISphereParams|any) = {};
 
 
-    // IS THIS WORKING?
-    if (this instanceof Cube){
-      (this.constructor as typeof Cube).parameterTypes.forEach(paramType => {
+    (this.constructor as typeof Object3D).parameterTypes.forEach(paramType => {
         defaultParams[paramType.name!] = paramType.defaultValue;
       });
-    }
 
     // select random color
     const colorI: number = Math.floor(Math.random() * Object3D.colors.length);
@@ -218,10 +216,8 @@ export class Object3D{
 
   public toJSON():IObject3DJson {
     let type:string ="";
-    if (this instanceof Cube){
-      type = (this.constructor as typeof Cube).typeName;
-    }
-
+    type = (this.constructor as typeof Object3D).typeName;
+  
     const {id, name, parameters, operations, constructor} = this;
     return {
       id,

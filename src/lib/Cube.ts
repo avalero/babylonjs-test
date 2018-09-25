@@ -1,5 +1,5 @@
-import {Object3D, IParameterType, ICubeParams, ISphereParams} from './Object3D';
 import * as BABYLON from 'babylonjs';
+import {ICubeParams, IParameterType, Object3D} from './Object3D';
 
 
 export default class Cube extends Object3D {
